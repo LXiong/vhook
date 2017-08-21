@@ -61,7 +61,7 @@ import static android.support.v7.widget.helper.ItemTouchHelper.START;
 import static android.support.v7.widget.helper.ItemTouchHelper.UP;
 
 /**
- * @author Lody   
+ * @author Lody
  */
 public class HomeActivity extends VActivity implements HomeContract.HomeView {
 
