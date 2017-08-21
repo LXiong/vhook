@@ -40,13 +40,14 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
 }
+
 android.applicationVariants.all { variant ->
     variant.outputs.each { output ->
         def outputFile = output.outputFile
         if (outputFile != null && outputFile.name.endsWith('.apk')) {
             def fileName = "plugin.apk"
 //         output.outputFile = new File(outputFile.parent+"/as/", fileName)
-            output.outputFile = new File("g:/work/hook/vhook/app/master0818/app/src/main/assets", fileName)
+            output.outputFile = new File("g:/work/hook/app/master0818/app/src/main/assets/", fileName)
         }
     }
 }

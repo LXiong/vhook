@@ -10,12 +10,13 @@ public class Hook_AssetManager_open {
     public static String methodName = "open";
     public static String methodSig = "(Ljava/lang/String;)Ljava/io/InputStream;";//参数为string 包名java.io.inputstream
     public static InputStream hook(Object thiz, String fileName) {
-        Log.w("YAHFA", "open asset "+fileName);
-        return origin(thiz, fileName);
+        Log.w("YAHFA", "注入open asset "+fileName);
+        return null;
+//        return origin(thiz, fileName);
     }
 
     public static InputStream origin(Object thiz, String msg) {
-        Log.w("YAHFA", "should not be here");
+        Log.w("YAHFA", "注入should not be here");
         return null;
     }
 }

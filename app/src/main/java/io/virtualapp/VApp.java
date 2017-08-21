@@ -76,6 +76,8 @@ public class VApp extends Application {
                 virtualCore.addVisibleOutsidePackage("com.immomo.momo");
             }
         });
+
+        CrashHandler.getInstance().init(this);
     }
 
     public static SharedPreferences getPreferences() {

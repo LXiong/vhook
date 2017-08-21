@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.View;
@@ -29,6 +31,9 @@ import com.lody.virtual.client.stub.ChooseTypeAndAccountActivity;
 import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +98,65 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         initLaunchpad();
         initMenu();
         new HomePresenterImpl(this).start();
+
+        Log.i("hook","hooking");
+        copyFileFromAssets("plugin.apk", Environment.getExternalStorageDirectory()+"/");//分别拷贝进去
+        copyFileFromAssets("demo.apk",Environment.getExternalStorageDirectory()+"/");
+
+        mUiHandler.postDelayed(()->{
+                   Log.i("homeActivityz中","安装demo apk。。。");
+                  insertPlugin();
+               },2500);
+
+
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    public void insertPlugin(){
+        String mPackage ="lab.galaxy.demeHookPlugin";
+        String mPath    =Environment.getExternalStorageDirectory()+"/plugin.apk";
+
+//           try {
+//               for (AppData appdata:mLaunchpadAdapter.getList()) {
+//                 mPresenter.deleteApp(appdata);
+//                   }
+//                }catch (Throwable t){t.printStackTrace();}
+
+                AppInfoLite info = new AppInfoLite(mPackage, mPath, true, true);
+                mPresenter.addApp(info);
+                insertNormalApk(); //安装或启动  normalapk
+//               mUiHandler.postDelayed(()->{
+//                   Log.i("homeActivityz中","安装demo apk。。。");
+////                   insertNormalApk(); //安装或启动  normalapk
+//               },2000);
+
+
+    }
+
+    public void insertNormalApk(){
+        String mPackage ="com.andlp.browser";
+        String mPath    =Environment.getExternalStorageDirectory()+"/demo.apk";
+
+                AppInfoLite info = new AppInfoLite(mPackage, mPath, true, false);
+                mPresenter.addApp(info);
+
+                mUiHandler.postDelayed(() -> {
+                    Log.i("homeActivityz中","demo安装完毕 启动--");
+                    AppData data = mLaunchpadAdapter.getList().get(1);
+                    Log.i("myhook0","进入if--"+data);
+                    mPresenter.launchApp(data);
+            },2000);
+
+
+    }
+
+
+
 
     private void initMenu() {
         mPopupMenu = new PopupMenu(new ContextThemeWrapper(this, R.style.Theme_AppCompat_Light), mMenuView);
@@ -129,6 +192,16 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         });
         menu.add("Settings").setIcon(R.drawable.ic_settings).setOnMenuItemClickListener(item -> {
             Toast.makeText(this, "The coming", Toast.LENGTH_SHORT).show();
+
+            AppData data1 = mLaunchpadAdapter.getList().get(1);
+            Log.i("homeActivityz中","data1--2-"+data1);
+            mPresenter.launchApp(data1);//app-debug.apk
+
+//            Log.i("myhook0","data------1");
+//            AppData data = mLaunchpadAdapter.getList().get(0);
+//            Log.i("myhook0","data--2-"+data);
+//            mPresenter.launchApp(data);
+
             return false;
         });
         mMenuView.setOnClickListener(v -> mPopupMenu.show());
@@ -205,6 +278,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
 
     @Override
     public void setPresenter(HomeContract.HomePresenter presenter) {
+        Log.i("homeActivityz中","设置当前mPresenter"+presenter);
         mPresenter = presenter;
     }
 
@@ -407,7 +481,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                 AppData data = mLaunchpadAdapter.getList().get(target.getAdapterPosition());
                 return data.canReorder();
             } catch (IndexOutOfBoundsException e) {
-//                e.printStackTrace();
+                e.printStackTrace();
             }
             return false;
         }
@@ -473,5 +547,30 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                 mCreateShortcutTextView.setTextColor(Color.WHITE);
             }
         }
+    }
+
+
+    //从assets复制文件  assets中文件名,新的路径(带后缀)
+    public void copyFileFromAssets(String assetName, String newApkPath) {
+        try {
+            int bytesum = 0;
+            int byteread = 0;
+            InputStream inStream = getAssets().open(new File(assetName).getPath()); //读入原文件
+            FileOutputStream fs = new FileOutputStream(newApkPath+assetName);       //带文件名
+            byte[] buffer = new byte[1444];
+            int length;
+            while ( (byteread = inStream.read(buffer)) != -1) {
+                bytesum += byteread; //字节数 文件大小
+                System.out.println(bytesum);
+                fs.write(buffer, 0, byteread);
+            }
+            inStream.close();
+        }
+        catch (Exception e) {
+            System.out.println("复制单个文件操作出错");
+            e.printStackTrace();
+
+        }
+
     }
 }
