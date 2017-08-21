@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.andlp.browser.R;
 
@@ -75,6 +76,7 @@ public class Activity_Main extends Activity_Base {
         img.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 fullscreen(fullscreen);
+                Toast.makeText(Activity_Main.this, "test", Toast.LENGTH_SHORT).show();
             }
         });
         layout_top.addView(img);
