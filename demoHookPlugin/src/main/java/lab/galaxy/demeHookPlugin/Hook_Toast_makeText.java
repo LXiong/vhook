@@ -38,15 +38,17 @@ public class Hook_Toast_makeText {
         Log.w("YAHFA", "开始注入toast中f:"+f);
          dialog(a);
 //        b="hooked";//更改为hook 之后的内容
-        b="hooked";
         Log.w("YAHFA", "开始注入toast中h:"+HermesEventBus.getDefault());
         testt t = new testt();
 //        HermesEventBus.getDefault().register(this);
-        HermesEventBus.getDefault().connectApp(a, "io.virtualhook");
+//        HermesEventBus.getDefault().connectApp(a, "io.virtualhook");
         HermesEventBus.getDefault().post("这a是从plugin发送的消息000");
         HermesEventBus.getDefault().postSticky("这是从plugin发送的消息");
 
 
+        if (b.equals("123456789012345")){
+               HookInfo.toast=false;
+        }
         return origin(a,b,c);
     }
 
@@ -66,7 +68,7 @@ public class Hook_Toast_makeText {
             HermesEventBus.getDefault().register(this);
         }
 
-        @Subscribe(threadMode = ThreadMode.MAIN ,sticky = true)
+        @Subscribe(threadMode = ThreadMode.MAIN )
         public void showText(String text) {
             Log.i("yahfa","hook--plugin中eventbus 收到消息："+text);
 //        Toast.makeText(HomeActivity.this,"t:"+text,Toast.LENGTH_SHORT).show();

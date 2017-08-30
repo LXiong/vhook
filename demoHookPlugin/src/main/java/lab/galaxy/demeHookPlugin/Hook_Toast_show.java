@@ -24,7 +24,10 @@ public class Hook_Toast_show {
     public static void hook(Object thiz) {
         Log.w("YAHFA", "show开始注入toast中a:"+thiz);
         Log.w("YAHFA", "show开始注入toast中application:"+HookInfo.application);
-        origin(thiz);//注释掉toast不显示  (据需判显示toast不崩)
+        if (HookInfo.toast){
+            origin(thiz);//注释掉toast不显示  (据需判显示toast不崩)
+        }
+
     }
     public static void origin(Object thiz) {
         Log.w("YAHFA", "show注入toast中完毕,执行后续--"+thiz);

@@ -3,6 +3,9 @@ package lab.galaxy.yahfa;
 import android.app.Application;
 import android.util.Log;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import xiaofei.library.hermeseventbus.HermesEventBus;
 
 /**
@@ -10,6 +13,7 @@ import xiaofei.library.hermeseventbus.HermesEventBus;
  */
 
 public class HookInfo {
+    public static  boolean toast=true;
     static {
         System.loadLibrary("helloJni");
     }
@@ -17,9 +21,9 @@ public class HookInfo {
 
     public static void init(Application app){
         application=app;
-//        HermesEventBus.getDefault().register(application);
-//        HermesEventBus.getDefault().connectApp(application, "io.virtualhook");
-//        HermesEventBus.getDefault().post("这a是从plugin发送的消息000");
+        HermesEventBus.getDefault().connectApp(application, "io.virtualhook");
+        testt t = new testt();
+        HermesEventBus.getDefault().post("这a是从plugin发送的消息000");
         Log.i("yahfa","eventbus--"+HermesEventBus.getDefault());
     }
 
@@ -33,4 +37,19 @@ public class HookInfo {
         "lab.galaxy.demeHookPlugin.Hook_TelephonyManager_getDeviceId",
         "lab.galaxy.demeHookPlugin.Hook_Application_onCreate",
     };
+
+
+    static class  testt {
+        public void testt(){
+            HermesEventBus.getDefault().register(this);
+        }
+
+        @Subscribe(threadMode = ThreadMode.MAIN ,sticky = true)
+        public void showText(String text) {
+            Log.i("yahfa","hook--plugin中eventbus 收到消息："+text);
+//        Toast.makeText(HomeActivity.this,"t:"+text,Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
 }
