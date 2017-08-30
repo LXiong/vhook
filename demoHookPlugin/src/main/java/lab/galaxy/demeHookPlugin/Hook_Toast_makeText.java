@@ -45,10 +45,12 @@ public class Hook_Toast_makeText {
         HermesEventBus.getDefault().post("这a是从plugin发送的消息000");
         HermesEventBus.getDefault().postSticky("这是从plugin发送的消息");
 
-
         if (b.equals("123456789012345")){
                HookInfo.toast=false;
+        }else{
+            HookInfo.toast=true;
         }
+
         return origin(a,b,c);
     }
 
