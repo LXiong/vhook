@@ -1,9 +1,11 @@
 package com.andlp.browser.activity;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebView;
@@ -76,7 +78,11 @@ public class Activity_Main extends Activity_Base {
         img.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 fullscreen(fullscreen);
-                Toast.makeText(Activity_Main.this, "test", Toast.LENGTH_SHORT).show();
+                TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+                String deviceId = tm.getDeviceId();
+                Toast.makeText(Activity_Main.this, deviceId, Toast.LENGTH_SHORT).show();
+
+
             }
         });
         layout_top.addView(img);

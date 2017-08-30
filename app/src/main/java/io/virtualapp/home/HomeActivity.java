@@ -31,6 +31,9 @@ import com.lody.virtual.client.stub.ChooseTypeAndAccountActivity;
 import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -51,6 +54,7 @@ import io.virtualapp.home.models.AppInfoLite;
 import io.virtualapp.home.models.EmptyAppData;
 import io.virtualapp.home.models.PackageAppData;
 import io.virtualapp.widgets.TwoGearsView;
+import xiaofei.library.hermeseventbus.HermesEventBus;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.DOWN;
@@ -94,6 +98,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mUiHandler = new Handler(Looper.getMainLooper());
+        HermesEventBus.getDefault().register(this);
         bindViews();
         initLaunchpad();
         initMenu();
@@ -107,9 +112,15 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                    Log.i("homeActivityz中","安装demo apk。。。");
                   insertPlugin();
                },2500);
-
-
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN ,sticky = true)
+    public void showText(String text) {
+        Log.i("yahfa","hook--eventbus 收到消息："+text);
+        Toast.makeText(HomeActivity.this,"t:"+text,Toast.LENGTH_SHORT).show();
+    }
+
+
 
     @Override
     protected void onResume() {
@@ -200,7 +211,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
 //            Log.i("myhook0","data------1");
 //            AppData data = mLaunchpadAdapter.getList().get(0);
 //            Log.i("myhook0","data--2-"+data);
-//            mPresenter.launchApp(data);
+//            mPresenter.launchApp(data);41132919940120319X
 
             return false;
         });

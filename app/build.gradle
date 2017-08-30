@@ -56,4 +56,5 @@ dependencies {
     // ThirdParty
     compile 'com.jonathanfinerty.once:once:1.0.3'
     compile 'com.kyleduo.switchbutton:library:1.4.6'
+    compile 'xiaofei.library:hermes-eventbus:0.1.1'
 }

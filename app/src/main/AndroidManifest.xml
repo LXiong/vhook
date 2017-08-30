@@ -36,6 +36,9 @@
             android:screenOrientation="portrait"
             android:taskAffinity="va.task.loading"
             android:theme="@style/TransparentTheme" />
+        <service android:name="xiaofei.library.hermes.HermesService$HermesService0"
+            android:exported="true"
+            />
 
     </application>
 

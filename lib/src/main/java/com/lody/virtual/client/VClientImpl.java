@@ -335,6 +335,8 @@ public final class VClientImpl extends IVClient.Stub {
             e.printStackTrace();
         }
 
+
+
     }
 
     private void applyHookPlugin(String apkPath, String libPath, ClassLoader appClassLoader) {
@@ -342,7 +344,30 @@ public final class VClientImpl extends IVClient.Stub {
                 VEnvironment.getDalvikCacheDirectory().getAbsolutePath(),
                 libPath,
                 appClassLoader);
+        try{
+            doHookDefault(dexClassLoader, appClassLoader,mInitialApplication);//
+        }catch (Throwable t){t.printStackTrace();}
+
         HookMain.doHookDefault(dexClassLoader, appClassLoader);
+    }
+
+    public void doHookDefault (ClassLoader patchClassLoader, ClassLoader originClassLoader, Application application)
+    {
+        try
+        {
+            Class<?> hookInfoClass = Class.forName("lab.galaxy.yahfa.HookInfo", true, patchClassLoader);
+
+            hookInfoClass.getMethod("init", Application.class).invoke(hookInfoClass.newInstance(), application);
+
+            String[] hookItemNames = (String[]) hookInfoClass.getField("hookItemNames").get(null);
+            for (String hookItemName : hookItemNames)
+            {
+              Log.i("yahfa--hook","hookItemName:"+hookItemName);
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void setupUncaughtHandler() {

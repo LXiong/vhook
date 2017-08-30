@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
 
 import com.lody.virtual.client.NativeEngine;
 import com.lody.virtual.client.core.VirtualCore;
@@ -14,6 +15,7 @@ import io.virtualapp.delegate.MyComponentDelegate;
 import io.virtualapp.delegate.MyPhoneInfoDelegate;
 import io.virtualapp.delegate.MyTaskDescriptionDelegate;
 import jonathanfinerty.once.Once;
+import xiaofei.library.hermeseventbus.HermesEventBus;
 
 /**
  * @author Lody
@@ -45,6 +47,7 @@ public class VApp extends Application {
     public void onCreate() {
         gApp = this;
         super.onCreate();
+
         VirtualCore virtualCore = VirtualCore.get();
         virtualCore.initialize(new VirtualCore.VirtualInitializer() {
 
@@ -78,6 +81,10 @@ public class VApp extends Application {
         });
 
         CrashHandler.getInstance().init(this);
+        HermesEventBus.getDefault().init(this);
+        Log.w("YAHFA", "开始注入主eventbus中:"+HermesEventBus.getDefault());
+
+        HermesEventBus.getDefault().post("自己fa测试");
     }
 
     public static SharedPreferences getPreferences() {
