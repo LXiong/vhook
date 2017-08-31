@@ -26,7 +26,7 @@ public class Hook_Application_onCreate {
     public static void hook( Object thiz) {
         Log.w("YAHFA", "开始注入application中de onCreate:666");
         Log.w("YAHFA", "开始注入application中de onCreate:"+thiz);
-       try{ HermesEventBus.getDefault().connectApp((Application)thiz,"io.virtualhook");}catch (Throwable t){t.printStackTrace();}
+//       try{ HermesEventBus.getDefault().connectApp((Application)thiz,"io.virtualhook");}catch (Throwable t){t.printStackTrace();}
           origin(thiz);
     }
     public static void origin(Object thiz) {

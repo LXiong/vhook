@@ -1,6 +1,7 @@
 package lab.galaxy.yahfa;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -14,17 +15,30 @@ import xiaofei.library.hermeseventbus.HermesEventBus;
 
 public class HookInfo {
     public static  boolean toast=true;
+    public static  boolean eventbus=false;
+
     static {
-        System.loadLibrary("helloJni");
+        System.loadLibrary(
+                "helloJni");
     }
     public static Application application;
+    public Context context;
 
     public static void init(Application app){
         application=app;
-        HermesEventBus.getDefault().connectApp(application, "io.virtualhook");
-        testt t = new testt();
-        HermesEventBus.getDefault().post("这a是从plugin发送的消息000");
-        Log.i("yahfa","eventbus--"+HermesEventBus.getDefault());
+//        HermesEventBus.getDefault().connectApp(application.getApplicationContext(), "io.virtualhook");
+
+        if(!eventbus){
+            eventbus=true;
+            Log.i("yahfa","hookinfo中wei注册eventbus--"+HermesEventBus.getDefault());
+            HermesEventBus.getDefault().connectApp(application.getApplicationContext(),"io.virtualhook");
+            HermesEventBus.getDefault().post("yahfa 这a是从plugin发送的消息000");
+            Log.i("yahfa","hookinfo中刚注册eventbus--"+HermesEventBus.getDefault());
+        }else {
+            Log.i("yahfa","hookinfo中yijing已经注册eventbus--"+HermesEventBus.getDefault());
+        }
+
+
     }
 
 

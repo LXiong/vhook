@@ -98,7 +98,13 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mUiHandler = new Handler(Looper.getMainLooper());
+        Log.i("yahfa","home中wei注册eventbus--"+HermesEventBus.getDefault());
+        HermesEventBus.getDefault().init(this);
+        Log.i("yahfa","home中yi已注册eventbus--"+HermesEventBus.getDefault());
         HermesEventBus.getDefault().register(this);
+        Log.i("yahfa","home中zui最后注册eventbus--"+HermesEventBus.getDefault());
+
+        HermesEventBus.getDefault().post("yahfa  plugin 发送系奥利");
         bindViews();
         initLaunchpad();
         initMenu();

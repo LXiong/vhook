@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Looper;
 import android.util.Log;
 
 import com.lody.virtual.client.NativeEngine;
@@ -14,6 +15,7 @@ import io.virtualapp.delegate.MyAppRequestListener;
 import io.virtualapp.delegate.MyComponentDelegate;
 import io.virtualapp.delegate.MyPhoneInfoDelegate;
 import io.virtualapp.delegate.MyTaskDescriptionDelegate;
+import io.virtualapp.widgets.TES;
 import jonathanfinerty.once.Once;
 import xiaofei.library.hermeseventbus.HermesEventBus;
 
@@ -81,11 +83,23 @@ public class VApp extends Application {
         });
 
         CrashHandler.getInstance().init(this);
-        HermesEventBus.getDefault().init(this);
-        Log.w("YAHFA", "开始注入主eventbus中:"+HermesEventBus.getDefault());
 
-        HermesEventBus.getDefault().post("自己fa测试");
+        if (!TES.event){
+            TES.event=true;
+//        HermesEventBus.getDefault().init(this);
+            TES.num+=1;
+            Log.w("YAHFA", "开始注入主eventbus中:"+TES.num);
+//        Log.w("YAHFA", "开始注入主eventbus中:"+HermesEventBus.getDefault());
+
+//        HermesEventBus.getDefault().post("自己fa测试");
+    }else{
+//            Log.w("YAHFA", "开始注入主eventbus中的else--:"+HermesEventBus.getDefault());
+   }
+
     }
+
+
+    public static  boolean eventbus=false;
 
     public static SharedPreferences getPreferences() {
         return getApp().mPreferences;

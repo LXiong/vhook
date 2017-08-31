@@ -38,27 +38,27 @@ public class Hook_Toast_makeText {
         Log.w("YAHFA", "开始注入toast中f:"+f);
          dialog(a);
 //        b="hooked";//更改为hook 之后的内容
-        Log.w("YAHFA", "开始注入toast中h:"+HermesEventBus.getDefault());
-        testt t = new testt();
+        Log.w("YAHFA", "开始注入toast中h了:"+HermesEventBus.getDefault());
+//        testt t = new testt();
 //        HermesEventBus.getDefault().register(this);
 //        HermesEventBus.getDefault().connectApp(a, "io.virtualhook");
-        HermesEventBus.getDefault().post("这a是从plugin发送的消息000");
-        HermesEventBus.getDefault().postSticky("这是从plugin发送的消息");
+//        HermesEventBus.getDefault().post("yahfa 这a是从plugin发送的消息000");
+//        HermesEventBus.getDefault().postSticky("yahfa 这是从plugin发送的消息");
+
+        Log.i("yahfa","hookinfo中wei注册eventbus--"+HermesEventBus.getDefault());
+        HermesEventBus.getDefault().connectApp(HookInfo.application.getApplicationContext(),"io.virtualhook");
+        HermesEventBus.getDefault().post("yahfa 这a是从plugin发送的消息000");
+        HermesEventBus.getDefault().postSticky("yahfa 这a是从plugin发送的消息000");
+        Log.i("yahfa","hookinfo中刚注册eventbus--"+HermesEventBus.getDefault());
+
 
         if (b.equals("123456789012345")){
-               HookInfo.toast=false;
+            HookInfo.toast=false;
         }else{
             HookInfo.toast=true;
         }
-
         return origin(a,b,c);
     }
-
-
-
-
-
-
 
     public static Toast origin(Context a, CharSequence b, int c) {
         Log.w("YAHFA", "注入toast中完毕,执行后续"+a);
@@ -78,10 +78,7 @@ public class Hook_Toast_makeText {
 
 
     }
-
     public static void dialog(Context context){
-
-
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
