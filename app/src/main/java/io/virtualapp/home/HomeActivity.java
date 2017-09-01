@@ -31,13 +31,19 @@ import com.lody.virtual.client.stub.ChooseTypeAndAccountActivity;
 import com.lody.virtual.os.VUserInfo;
 import com.lody.virtual.os.VUserManager;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import org.xutils.x;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +60,6 @@ import io.virtualapp.home.models.AppInfoLite;
 import io.virtualapp.home.models.EmptyAppData;
 import io.virtualapp.home.models.PackageAppData;
 import io.virtualapp.widgets.TwoGearsView;
-import xiaofei.library.hermeseventbus.HermesEventBus;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.DOWN;
@@ -84,6 +89,9 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     private LaunchpadAdapter mLaunchpadAdapter;
     private Handler mUiHandler;
 
+    ServerLastly server;//socket 用
+
+
 
     public static void goHome(Context context) {
         Intent intent = new Intent(context, HomeActivity.class);
@@ -98,19 +106,11 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mUiHandler = new Handler(Looper.getMainLooper());
-        Log.i("yahfa","home中wei注册eventbus--"+HermesEventBus.getDefault());
-        HermesEventBus.getDefault().init(this);
-        Log.i("yahfa","home中yi已注册eventbus--"+HermesEventBus.getDefault());
-        HermesEventBus.getDefault().register(this);
-        Log.i("yahfa","home中zui最后注册eventbus--"+HermesEventBus.getDefault());
-
-        HermesEventBus.getDefault().post("yahfa  plugin 发送系奥利");
         bindViews();
         initLaunchpad();
         initMenu();
         new HomePresenterImpl(this).start();
-
-        Log.i("hook","hooking");
+        Log.i("yahfa ","home 的oncreate中-----");
         copyFileFromAssets("plugin.apk", Environment.getExternalStorageDirectory()+"/");//分别拷贝进去
         copyFileFromAssets("demo.apk",Environment.getExternalStorageDirectory()+"/");
 
@@ -118,19 +118,137 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                    Log.i("homeActivityz中","安装demo apk。。。");
                   insertPlugin();
                },2500);
+
+
+        server=new ServerLastly();
+        new Thread(server).start();
+
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN ,sticky = true)
-    public void showText(String text) {
-        Log.i("yahfa","hook--eventbus 收到消息："+text);
-        Toast.makeText(HomeActivity.this,"t:"+text,Toast.LENGTH_SHORT).show();
+    boolean need_static=false;//新开的界面需要管理栈
+    class ServerLastly implements Runnable{
+        private static final String TAG="ServerLastly";
+        ServerSocket server;
+        Socket client;
+        PrintWriter os;
+        BufferedReader is;
+
+        Handler handler;
+
+        /**
+         * 此处不将连接代码写在构造方法中的原因：
+         * 我在activity的onCreate()中创建示例，如果将连接代码 写在构造方法中，服务端会一直等待客户端连接，界面没有去描绘，会一直出现白屏。
+         * 直到客户端连接上了，界面才会描绘出来。原因是构造方法阻塞了主线程，要另开一个线程。在这里我将它写在了run()中。
+         */
+        ServerLastly(){//Handler handler
+//            this.handler=handler;
+//        Log.i(TAG, "Server=======打开服务=========");
+//        try {
+//            server=new ServerSocket(8888);
+//            client=server.accept();
+//            Log.i(TAG, "Server=======客户端连接成功=========");
+//             InetAddress inetAddress=client.getInetAddress();
+//             String ip=inetAddress.getHostAddress();
+//            Log.i(TAG, "===客户端ID为:"+ip);
+//            os=new PrintWriter(client.getOutputStream());
+//            is=new BufferedReader(new InputStreamReader(client.getInputStream()));
+//
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+        }
+
+        //发数据
+        public void send(String data){
+            if (os!=null) {
+                os.println(data);
+                os.flush();
+            }
+        }
+
+        //接数据
+        @Override
+        public void run() {
+            Log.i(TAG, "yahfa Server=======打开服务=========");
+            try {
+                server=new ServerSocket(4561);
+                client=server.accept();
+                Log.i(TAG, "yahfa Server=======客户端连接成功=========");
+                InetAddress inetAddress=client.getInetAddress();
+                String ip=inetAddress.getHostAddress();
+                Log.i(TAG, "yahfa ===客户端ID为:"+ip);
+                os=new PrintWriter(client.getOutputStream());
+                is=new BufferedReader(new InputStreamReader(client.getInputStream()));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            String result="";
+            while(true){
+                try {
+                    result=is.readLine();
+                    Log.i(TAG, "yahfa 服务端接到的数据为："+result);
+                    if(result.equals("6")){
+                        need_static=true;
+                        x.task().autoPost(new Runnable() {
+                            @Override public void run() {
+                                Intent intent = new Intent(HomeActivity.this,ListAppActivity.class);
+//                               Intent intent = new Intent(x.app().getApplicationContext(),ListAppActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
+
+        public void close(){
+            try {
+                if (os!=null) {
+                    os.close();
+                }
+                if (is!=null) {
+                    is.close();
+                }
+                if(client!=null){
+                    client.close();
+                }
+                if (server!=null) {
+                    server.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
     }
+
+
+
 
 
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("yahfa ","home的onresume()------");
+        if (need_static){
+            need_static=false;
+            AppData data1 = mLaunchpadAdapter.getList().get(1);
+            Log.i("homeActivityz中","data1--2-"+data1);
+            mPresenter.launchApp(data1);//app-debug.apk
+        }
+
 
     }
 
@@ -589,5 +707,11 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
 
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        server.close();
     }
 }

@@ -18,7 +18,8 @@ public class MyTaskDescriptionDelegate implements TaskDescriptionDelegate {
         if (oldTaskDescription == null) {
             return null;
         }
-        String labelPrefix = "[" + VUserManager.get().getUserName() + "] ";
+//        String labelPrefix = "[" + VUserManager.get().getUserName() + "] ";
+        String labelPrefix = "";
         String oldLabel = oldTaskDescription.getLabel() != null ? oldTaskDescription.getLabel() : "";
 
         if (!oldLabel.startsWith(labelPrefix)) {

@@ -137,6 +137,7 @@ public class VActivityManagerService extends IActivityManager.Stub {
         synchronized (this) {
             ActivityInfo[] infos = new ActivityInfo[intents.length];
             for (int i = 0; i < intents.length; i++) {
+//                intents[i].setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                 ActivityInfo ai = VirtualCore.get().resolveActivityInfo(intents[i], userId);
                 if (ai == null) {
                     return ActivityManagerCompat.START_INTENT_NOT_RESOLVED;

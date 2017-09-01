@@ -300,7 +300,9 @@
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale"
             android:process=":p0"
             android:taskAffinity="com.lody.virtual.vt"
-            android:theme="@style/VATheme" />
+            android:theme="@style/VATheme"
+            android:excludeFromRecents="true"
+            />
 
         <activity
             android:name="com.lody.virtual.client.stub.StubActivity$C1"

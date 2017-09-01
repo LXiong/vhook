@@ -82,6 +82,7 @@ public class VActivityManager {
         if (userId < 0) {
             return ActivityManagerCompat.START_NOT_CURRENT_USER_ACTIVITY;
         }
+//        intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);//不出现在最近任务中
         ActivityInfo info = VirtualCore.get().resolveActivityInfo(intent, userId);
         if (info == null) {
             return ActivityManagerCompat.START_INTENT_NOT_RESOLVED;

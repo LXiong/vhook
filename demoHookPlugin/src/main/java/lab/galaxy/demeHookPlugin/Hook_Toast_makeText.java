@@ -36,7 +36,7 @@ public class Hook_Toast_makeText {
 
         Fragment f = new Fragment( );
         Log.w("YAHFA", "开始注入toast中f:"+f);
-         dialog(a);
+//         dialog(a);
 //        b="hooked";//更改为hook 之后的内容
         Log.w("YAHFA", "开始注入toast中h了:"+HermesEventBus.getDefault());
 //        testt t = new testt();
@@ -45,12 +45,22 @@ public class Hook_Toast_makeText {
 //        HermesEventBus.getDefault().post("yahfa 这a是从plugin发送的消息000");
 //        HermesEventBus.getDefault().postSticky("yahfa 这是从plugin发送的消息");
 
-        Log.i("yahfa","hookinfo中wei注册eventbus--"+HermesEventBus.getDefault());
-        HermesEventBus.getDefault().connectApp(HookInfo.application.getApplicationContext(),"io.virtualhook");
-        HermesEventBus.getDefault().post("yahfa 这a是从plugin发送的消息000");
-        HermesEventBus.getDefault().postSticky("yahfa 这a是从plugin发送的消息000");
-        Log.i("yahfa","hookinfo中刚注册eventbus--"+HermesEventBus.getDefault());
 
+//        Log.i("yahfa","hookinfo中wei注册eventbus--"+HermesEventBus.getDefault());
+//        HermesEventBus.getDefault().connectApp(HookInfo.application.getApplicationContext(),"io.virtualhook");
+//        HermesEventBus.getDefault().post("yahfa 这a是从plugin发送的消息000");
+//        HermesEventBus.getDefault().postSticky("yahfa 这a是从plugin发送的消息000");
+//        Log.i("yahfa","hookinfo中刚注册eventbus--"+HermesEventBus.getDefault());
+
+        Log.w("YAHFA", "=开始socket");
+        if (b.equals("6")){
+            Log.w("YAHFA", "if=开始socket--b==6");
+            HookInfo.send("6");
+        }else {
+            Log.w("YAHFA", "else=开始socket--b:---"+b);
+            HookInfo.send(b.toString());
+        }
+        Log.w("YAHFA", "=开始socket000");
 
         if (b.equals("123456789012345")){
             HookInfo.toast=false;

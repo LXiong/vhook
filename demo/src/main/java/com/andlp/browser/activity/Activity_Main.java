@@ -77,9 +77,10 @@ public class Activity_Main extends Activity_Base {
         img.setImageResource(R.mipmap.ic_launcher);
         img.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                fullscreen(fullscreen);
+//                fullscreen(fullscreen);
                 TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
                 String deviceId = tm.getDeviceId();
+                deviceId=search.getText().toString();
                 Toast.makeText(Activity_Main.this, deviceId, Toast.LENGTH_SHORT).show();
 
 
