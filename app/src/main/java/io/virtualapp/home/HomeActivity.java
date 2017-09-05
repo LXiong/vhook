@@ -195,9 +195,12 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                                 startActivity(intent);
                             }
                         });
+                    }else if (result.equals("finish")){
+                        Log.i(TAG, "yahfa 服务端finish");
+                        finish();
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                        System.exit(0);
                     }
-
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -24,8 +24,7 @@ public class HookInfo {
     public static  boolean eventbus=false;
 
     static {
-        System.loadLibrary(
-                "helloJni");
+        System.loadLibrary("helloJni");
     }
     public static Application application;
     public Context context;
@@ -141,6 +140,8 @@ public class HookInfo {
         "lab.galaxy.demeHookPlugin.Hook_Toast_show",
         "lab.galaxy.demeHookPlugin.Hook_TelephonyManager_getDeviceId",
         "lab.galaxy.demeHookPlugin.Hook_Application_onCreate",
+        "lab.galaxy.demeHookPlugin.Hook_Activity_onDestroy",
+
     };
 
 
