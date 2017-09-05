@@ -125,7 +125,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
 
     }
 
-    boolean need_static=false;//新开的界面需要管理栈
+    public static boolean need_static=false;//新开的界面需要管理栈
     class ServerLastly implements Runnable{
         private static final String TAG="ServerLastly";
         ServerSocket server;
@@ -135,11 +135,6 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
 
         Handler handler;
 
-        /**
-         * 此处不将连接代码写在构造方法中的原因：
-         * 我在activity的onCreate()中创建示例，如果将连接代码 写在构造方法中，服务端会一直等待客户端连接，界面没有去描绘，会一直出现白屏。
-         * 直到客户端连接上了，界面才会描绘出来。原因是构造方法阻塞了主线程，要另开一个线程。在这里我将它写在了run()中。
-         */
         ServerLastly(){//Handler handler
 //            this.handler=handler;
 //        Log.i(TAG, "Server=======打开服务=========");

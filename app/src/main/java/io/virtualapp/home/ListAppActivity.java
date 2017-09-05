@@ -73,6 +73,12 @@ public class ListAppActivity extends VActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        HomeActivity.need_static=true;
+        super.onDestroy();
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         for (int result : grantResults) {
             if (result == PackageManager.PERMISSION_GRANTED) {

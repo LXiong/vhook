@@ -13,6 +13,7 @@
             android:name="io.virtualapp.splash.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
+            android:excludeFromRecents="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,12 +25,14 @@
             android:name="io.virtualapp.home.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/UITheme"
+            android:excludeFromRecents="true"
             />
 
         <activity
             android:name="io.virtualapp.home.ListAppActivity"
             android:screenOrientation="portrait"
             android:theme="@style/UITheme"
+            android:excludeFromRecents="true"
             />
 
         <activity

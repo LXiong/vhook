@@ -256,7 +256,6 @@
         <activity
             android:name=".client.stub.ChooseAccountTypeActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:excludeFromRecents="true"
             android:exported="false"
             android:process="@string/engine_process_name"
             android:screenOrientation="portrait" />
@@ -264,7 +263,6 @@
         <activity
             android:name=".client.stub.ChooseTypeAndAccountActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:excludeFromRecents="true"
             android:exported="false"
             android:process="@string/engine_process_name"
             android:screenOrientation="portrait" />
@@ -272,7 +270,6 @@
         <activity
             android:name=".client.stub.ChooserActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:excludeFromRecents="true"
             android:exported="true"
             android:finishOnCloseSystemDialogs="true"
             android:process="@string/engine_process_name"
@@ -282,7 +279,6 @@
         <activity
             android:name=".client.stub.ResolverActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"
-            android:excludeFromRecents="true"
             android:exported="true"
             android:finishOnCloseSystemDialogs="true"
             android:process="@string/engine_process_name"
@@ -301,7 +297,6 @@
             android:process=":p0"
             android:taskAffinity="com.lody.virtual.vt"
             android:theme="@style/VATheme"
-            android:excludeFromRecents="true"
             />
 
         <activity

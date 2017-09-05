@@ -63,12 +63,11 @@ public class HookInfo {
 //            os=new PrintWriter(client.getOutputStream());
 //            is=new BufferedReader(new InputStreamReader(client.getInputStream()));
 //        } catch (IOException e) {
-//            // TODO Auto-generated catch block
 //            e.printStackTrace();
 //        }
         }
 
-        //发数据
+        //
         public   void send(String data){
             Log.i(TAG, "yahfa   Client发送=======data========="+data);
             if (os!=null) {

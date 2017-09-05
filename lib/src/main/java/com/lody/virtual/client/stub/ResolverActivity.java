@@ -71,7 +71,7 @@ public class ResolverActivity extends Activity implements AdapterView.OnItemClic
     private Intent makeMyIntent() {
         Intent intent = new Intent(getIntent());
         intent.setComponent(null);
-        intent.setFlags(intent.getFlags() & ~Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        intent.setFlags(intent.getFlags() & ~Intent.FLAG_ACTIVITY_NEW_TASK);
         return intent;
     }
 
