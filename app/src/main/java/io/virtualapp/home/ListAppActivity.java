@@ -74,7 +74,7 @@ public class ListAppActivity extends VActivity {
 
     @Override
     protected void onDestroy() {
-        HomeActivity.need_static=true;
+//        HomeActivity.need_static=true;
         super.onDestroy();
     }
 

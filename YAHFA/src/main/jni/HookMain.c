@@ -27,6 +27,13 @@ void Java_lab_galaxy_yahfa_HookMain_init(JNIEnv *env, jclass clazz, jint sdkVers
     SDKVersion = sdkVersion;
     LOGI("init to SDK %d", sdkVersion);
     switch(sdkVersion) {
+        case ANDROID_O:
+            OFFSET_ArtMehod_in_Object = 0;
+            OFFSET_hotness_count_in_ArtMethod = 4*4+2;
+            OFFSET_entry_point_from_quick_compiled_code_in_ArtMethod =
+                    roundUpToPtrSize(4*4+2*2) + pointer_size*2;
+            ArtMethodSize = roundUpToPtrSize(4*4+2*2)+pointer_size*3;
+            break;
         case ANDROID_N2:
         case ANDROID_N:
             OFFSET_ArtMehod_in_Object = 0;
@@ -97,8 +104,8 @@ static int doBackupAndHook(void *originMethod, void *hookMethod, void *backupMet
         LOGI("Allocating done");
     }
 
-//    LOGI("origin method is at %p, hook method is at %p, backup method is at %p",
-//         originMethod, hookMethod, backupMethod);
+    LOGI("origin method is at %p, hook method is at %p, backup method is at %p",
+         originMethod, hookMethod, backupMethod);
 
     if(!backupMethod) {
         LOGW("backup method is null");
@@ -170,7 +177,7 @@ void Java_lab_galaxy_yahfa_HookMain_findAndBackupAndHook(JNIEnv *env, jclass cla
         return;
     }
     void *targetMethod = NULL;
-    LOGI("Start findAndBackupAndHook for method %s%s", c_methodName, c_methodSig);
+    LOGI("Start findAndBackupAndHook for %s method %s%s", isStatic ? "static" : "non-static", c_methodName, c_methodSig);
     if(ArtMethodSize == 0) {
         LOGE("Not initialized");
         goto end;
@@ -184,7 +191,7 @@ void Java_lab_galaxy_yahfa_HookMain_findAndBackupAndHook(JNIEnv *env, jclass cla
 
     if((*env)->ExceptionCheck(env)) {
         (*env)->ExceptionClear(env);
-        LOGE("Cannot find target method %s%s%s", isStatic ? "static " : "", c_methodName, c_methodSig);
+        LOGE("Cannot find target %s method: %s%s", isStatic ? "static" : "non-static", c_methodName, c_methodSig);
         goto end;
     }
 
