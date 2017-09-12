@@ -60,6 +60,7 @@ import io.virtualapp.home.models.AppInfoLite;
 import io.virtualapp.home.models.EmptyAppData;
 import io.virtualapp.home.models.PackageAppData;
 import io.virtualapp.widgets.TwoGearsView;
+import lab.galaxy.yahfa.internalPlugin.My;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.DOWN;
@@ -111,7 +112,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         initMenu();
         new HomePresenterImpl(this).start();
         Log.i("yahfa ","home 的oncreate中-----");
-        copyFileFromAssets("plugin.apk", Environment.getExternalStorageDirectory()+"/");//分别拷贝进去
+//        copyFileFromAssets("plugin.apk", Environment.getExternalStorageDirectory()+"/");//分别拷贝进去
         copyFileFromAssets("demo.apk",Environment.getExternalStorageDirectory()+"/");
 
         mUiHandler.postDelayed(()->{
@@ -123,6 +124,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         server=new ServerLastly();
         new Thread(server).start();
 
+
     }
 
     boolean need_static=false;//新开的界面需要管理栈
@@ -133,30 +135,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         PrintWriter os;
         BufferedReader is;
 
-        Handler handler;
-
-        /**
-         * 此处不将连接代码写在构造方法中的原因：
-         * 我在activity的onCreate()中创建示例，如果将连接代码 写在构造方法中，服务端会一直等待客户端连接，界面没有去描绘，会一直出现白屏。
-         * 直到客户端连接上了，界面才会描绘出来。原因是构造方法阻塞了主线程，要另开一个线程。在这里我将它写在了run()中。
-         */
-        ServerLastly(){//Handler handler
-//            this.handler=handler;
-//        Log.i(TAG, "Server=======打开服务=========");
-//        try {
-//            server=new ServerSocket(8888);
-//            client=server.accept();
-//            Log.i(TAG, "Server=======客户端连接成功=========");
-//             InetAddress inetAddress=client.getInetAddress();
-//             String ip=inetAddress.getHostAddress();
-//            Log.i(TAG, "===客户端ID为:"+ip);
-//            os=new PrintWriter(client.getOutputStream());
-//            is=new BufferedReader(new InputStreamReader(client.getInputStream()));
-//
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
+        ServerLastly(){
         }
 
         //发数据
@@ -190,6 +169,10 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
             while(true){
                 try {
                     result=is.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    result="";
+                }
                     Log.i(TAG, "yahfa 服务端接到的数据为："+result);
                     if(result.equals("6")){
                         need_static=true;
@@ -203,9 +186,7 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
                     }
 
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
             }
 
 
@@ -244,7 +225,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
         Log.i("yahfa ","home的onresume()------");
         if (need_static){
             need_static=false;
-            AppData data1 = mLaunchpadAdapter.getList().get(1);
+//            AppData data1 = mLaunchpadAdapter.getList().get(1);
+            AppData data1 = mLaunchpadAdapter.getList().get(0);
             Log.i("homeActivityz中","data1--2-"+data1);
             mPresenter.launchApp(data1);//app-debug.apk
         }
@@ -253,17 +235,17 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     }
 
     public void insertPlugin(){
-        String mPackage ="lab.galaxy.demeHookPlugin";
-        String mPath    =Environment.getExternalStorageDirectory()+"/plugin.apk";
-
-//           try {
-//               for (AppData appdata:mLaunchpadAdapter.getList()) {
-//                 mPresenter.deleteApp(appdata);
-//                   }
-//                }catch (Throwable t){t.printStackTrace();}
-
-                AppInfoLite info = new AppInfoLite(mPackage, mPath, true, true);
-                mPresenter.addApp(info);
+//        String mPackage ="lab.galaxy.demeHookPlugin";
+//        String mPath    =Environment.getExternalStorageDirectory()+"/plugin.apk";
+//
+////           try {
+////               for (AppData appdata:mLaunchpadAdapter.getList()) {
+////                 mPresenter.deleteApp(appdata);
+////                   }
+////                }catch (Throwable t){t.printStackTrace();}
+//
+//                AppInfoLite info = new AppInfoLite(mPackage, mPath, true, true);
+//                mPresenter.addApp(info);
                 insertNormalApk(); //安装或启动  normalapk
 //               mUiHandler.postDelayed(()->{
 //                   Log.i("homeActivityz中","安装demo apk。。。");
@@ -282,7 +264,8 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
 
                 mUiHandler.postDelayed(() -> {
                     Log.i("homeActivityz中","demo安装完毕 启动--");
-                    AppData data = mLaunchpadAdapter.getList().get(1);
+//                    AppData data = mLaunchpadAdapter.getList().get(1);
+                    AppData data = mLaunchpadAdapter.getList().get(0);
                     Log.i("myhook0","进入if--"+data);
                     mPresenter.launchApp(data);
             },2000);
@@ -712,6 +695,6 @@ public class HomeActivity extends VActivity implements HomeContract.HomeView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        server.close();
+       try{ server.close();}catch (Throwable t){t.printStackTrace();}
     }
 }

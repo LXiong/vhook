@@ -17,7 +17,17 @@ public class Hook_Toast_makeText {
     public static Toast hook( Context a, CharSequence b, int c) {
         Log.w("YAHFA", "开始注入toast中a:"+a);
         Log.w("YAHFA", "开始注入toast中b:"+b);
-          b="hook";
+
+//        if (My.isfirst()){
+//            My.init();
+//            try{Thread.sleep(50);}catch (Throwable t){t.printStackTrace();}
+//        }
+
+        if (b.equals("6")){
+            try{My.send("6");}catch (Throwable t){t.printStackTrace();}
+        }
+
+          b="hooked";
 //        Log.w("YAHFA", "开始注入MainApp.hoo:"+MainApp.hoo);
 //        if (MainApp.hoo){
 //            MainApp.hoo=false;

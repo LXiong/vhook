@@ -98,47 +98,20 @@ public class VApp extends Application {
     }
 
     private void inject(){
-
-        try {
-            Method hook = null;
-            Method backup = null;
-            Class obj_class = null;
-            try {// Context a, CharSequence b, int c
-                Class[] pareTyple = {Context.class, CharSequence.class, int.class};
-                obj_class = Class.forName("lab.galaxy.yahfa.internalPlugin.Hook_Toast_makeText");
-                hook = obj_class.getMethod("hook",pareTyple);
-                backup = obj_class.getMethod("origin",pareTyple);
-
-                obj_class = Class.forName("android.widget.Toast");
-                HookMain.findAndBackupAndHook(
-                        obj_class,"makeText",
-                        "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
-                        hook,
-                        backup
-                );
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-//
-//        try { //hook
+//        try {
 //            Method hook = null;
 //            Method backup = null;
 //            Class obj_class = null;
-//
-//            try {
-//                Class[] pareTyple = { };
-//                obj_class = Class.forName("lab.galaxy.yahfa.internalPlugin.Hook_Toast_show");
+//            try {// Context a, CharSequence b, int c
+//                Class[] pareTyple = {Context.class, CharSequence.class, int.class};
+//                obj_class = Class.forName("lab.galaxy.yahfa.internalPlugin.Hook_Toast_makeText");
 //                hook = obj_class.getMethod("hook",pareTyple);
 //                backup = obj_class.getMethod("origin",pareTyple);
 //
 //                obj_class = Class.forName("android.widget.Toast");
 //                HookMain.findAndBackupAndHook(
-//                        obj_class,"show",
-//                        "()V",
+//                        obj_class,"makeText",
+//                        "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;",
 //                        hook,
 //                        backup
 //                );
@@ -150,61 +123,71 @@ public class VApp extends Application {
 //            e.printStackTrace();
 //        }
 
-        try { //hook
-            Method hook = null;
-            Method backup = null;
-            Class obj_class = null;
-            try {
-                Class[] pareTyple = {Object.class, String.class, String.class, String.class, String.class};
-                obj_class = Class.forName("lab.galaxy.yahfa.internalPlugin.Hook_ClassWithVirtualMethod_tac");
-                hook = obj_class.getMethod("hook",pareTyple);
-                backup = obj_class.getMethod("origin",pareTyple);
+        Class[] pareTyple = {Object.class};
 
-                obj_class = Class.forName("io.virtualapp.splash.ClassWithVirtualMethod");
-                HookMain.findAndBackupAndHook(
-                        obj_class,"tac",
-                        "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
-                        hook,
-                        backup
-                );
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        //hook toast
+        Class[] t_pareTyple = {Context.class, CharSequence.class, int.class};//lab目录下类的参数类型(须一致 int!=integer )
+        inject(t_pareTyple,"lab.galaxy.yahfa.internalPlugin.Hook_Toast_makeText",
+                "android.widget.Toast","makeText",
+                "(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;");
 
 
 
-        try { //hook
-            Method hook = null;
-            Method backup = null;
-            Class obj_class = null;
-            try {
-                Class[] pareTyple = {String.class, String.class};
-                obj_class = Class.forName("lab.galaxy.yahfa.internalPlugin.Hook_Log_e");
-                hook = obj_class.getMethod("hook",pareTyple);
-                backup = obj_class.getMethod("origin",pareTyple);
-
-                obj_class = Class.forName("android.util.Log");
-                HookMain.findAndBackupAndHook(
-                        obj_class,"e",
-                        "(Ljava/lang/String;Ljava/lang/String;)I",
-                        hook,
-                        backup
-                );
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        //hook 自定义类
+        Class[] mypareTyple = {Object.class, String.class, String.class, String.class, String.class};
+        inject(mypareTyple,
+                "lab.galaxy.yahfa.internalPlugin.Hook_ClassWithVirtualMethod_tac",
+                "io.virtualapp.splash.ClassWithVirtualMethod","tac",
+                "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
 
 
+        //hook application
+        inject(pareTyple,"lab.galaxy.yahfa.internalPlugin.Hook_Application_onCreate",
+                "android.app.Application","onCreate",
+                "()V");
 
+        //hook assets
+        Class[] Ass_mypareTyple = {Object.class, String.class};
+        inject(Ass_mypareTyple,"lab.galaxy.yahfa.internalPlugin.Hook_AssetManager_open",
+                "android.content.res.AssetManager","open",
+                "(Ljava/lang/String;)Ljava/io/InputStream;");
+
+
+        inject(pareTyple,"lab.galaxy.yahfa.internalPlugin.Hook_Toast_show",
+                "android.widget.Toast","show",
+                "()V");
 
     }
+
+
+
+    private void inject(Class[] pareTyple,String forName,String target,String tarMethed,String tarSign){
+        try { //hook
+            Method hook = null;
+            Method backup = null;
+            Class obj_class = null;
+            try {
+//                Class[] pareTyple = {Object.class};
+                obj_class = Class.forName(forName);
+                hook = obj_class.getMethod("hook",pareTyple);
+                backup = obj_class.getMethod("origin",pareTyple);
+
+                obj_class = Class.forName(target);
+                HookMain.findAndBackupAndHook(
+                        obj_class,tarMethed,
+                        tarSign,//签名
+                        hook,
+                        backup
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
