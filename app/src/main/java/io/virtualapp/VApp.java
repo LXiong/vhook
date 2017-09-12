@@ -17,7 +17,7 @@ import io.virtualapp.delegate.MyAppRequestListener;
 import io.virtualapp.delegate.MyComponentDelegate;
 import io.virtualapp.delegate.MyPhoneInfoDelegate;
 import io.virtualapp.delegate.MyTaskDescriptionDelegate;
-import jonathanfinerty.once.Once;
+//import jonathanfinerty.once.Once;
 import lab.galaxy.yahfa.HookMain;
 
 
@@ -58,7 +58,7 @@ public class VApp extends Application {
 
             @Override
             public void onMainProcess() {
-                Once.initialise(VApp.this);
+//                Once.initialise(VApp.this);
             }
 
             @Override

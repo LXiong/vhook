@@ -19,28 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="io.virtualapp.home.HomeActivity"
+            android:name="io.virtualapp.splash.NewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/UITheme"
             />
-
-        <activity
-            android:name="io.virtualapp.home.ListAppActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/UITheme"
-            />
-
-        <activity
-            android:name="io.virtualapp.home.LoadingActivity"
-            android:excludeFromRecents="true"
-            android:screenOrientation="portrait"
-            android:taskAffinity="va.task.loading"
-            android:theme="@style/TransparentTheme"
-            android:noHistory="true"
-            />
-
 
     </application>
 
